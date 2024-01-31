@@ -1,0 +1,24 @@
+\documentclass[border=0.5cm]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{booktabs}
+
+\begin{document}
+\begin{tabular}{llll}
+\toprule
+ $r$ & $x$ & $y$ & $L_n$\\
+\midrule
+ 260 & 1 & 0 & $L_1$\\
+ 57 & 0 & 1 & $L_2$\\
+\midrule
+ 32 & 1 & -4 & $L_{3} = L_{1} - 4L_{2}$ \\
+ 25 & -1 & 5 & $L_{4} = L_{2} - L_{3}$ \\
+ 7 & 2 & -9 & $L_{5} = L_{3} - L_{4}$ \\
+ 4 & -7 & 32 & $L_{6} = L_{4} - 3L_{5}$ \\
+ 3 & 9 & -41 & $L_{7} = L_{5} - L_{6}$ \\
+\midrule
+ 1 & -16 & 73 & $L_8 = L_6 - L_7$ \\
+\bottomrule
+\end{tabular}
+\end{document}
