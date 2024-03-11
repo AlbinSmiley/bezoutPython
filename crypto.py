@@ -13,7 +13,7 @@ eEx = 21
 stringEx ='jean est ici'
 
 def get_user_input():
-    response = input("Souhaitez-vous entrer de nouvelles valeurs ? (oui/non) : ").lower()
+    response = input("Souhaitez-vous entrer de nouvelles valeurs ? (oui/non) : \n\n").lower()
     if response in ['oui', 'o', 'yes', 'y']:
         n = int(input(f"Veuillez entrer la valeur pour le modulo {ITALIC}{GREEN}n{RESET} :     "))
         e = int(input(f"Veuillez entrer la valeur pour l'exposant {ITALIC}{GREEN}e{RESET} : "))
@@ -46,11 +46,55 @@ def process_code(n, e, string):
     remodulation = [f'${code[9][i]} = {element} \\rightarrow $ {lettres}' for i, (lettres, element) in enumerate(zip(code[11], blabla))]
     return bloc, groupes, stringedNumGroupes, transposition, table, modulation, remodulation, code[12]
 
-def crypto(n,e,string):
-    beginning_latex_text = """\\documentclass[a4paper,12pt]{article}\n\\usepackage[utf8]{inputenc}\n\\usepackage[T1]{fontenc}\n\\usepackage[french]{babel}\n\\usepackage{array}\n\\usepackage{graphicx}\n\\usepackage{gensymb}\n\\usepackage{amsfonts}\n\\usepackage{MnSymbol}\n\\usepackage{booktabs}\n\\usepackage{amsthm}\n\n\\begin{document}"""
-    end_latex_text = "\\end{document}"
+def crypto(n, e, string):
+    # Début et fin du document LaTeX avec des chaînes brutes pour gérer correctement les backslashes
+    beginning_latex_text = r"""\documentclass[a4paper,12pt]{article}
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage[french]{babel}
+    \usepackage{array}
+    \usepackage{graphicx}
+    \usepackage{gensymb}
+    \usepackage{amsfonts}
+    \usepackage{MnSymbol}
+    \usepackage{booktabs}
+    \usepackage{amsthm}
+
+    \begin{document}"""
+    end_latex_text = r"\end{document}"
+
+    # Processus de cryptage (supposé défini ailleurs)
     bloc, groupes, stringedNumGroupes, transposition, table, modulation, remodulation, coded_string = process_code(n, e, string)
-    result = f'''{beginning_latex_text}\n\n$$26^{{{bloc}}} \\leq {n} < 26^{{{bloc+1}}}$$\nIl nous faut donc coder le message en blocs de {bloc}\n\n{groupes} $\\rightarrow$ {stringedNumGroupes}\n\n{'\n\n'.join(transposition)}\n\n$${e}={binary(e)}_{{(2)}}$$\n\n{table}\n\n{'\n\n'.join(modulation)}\n\n{'\n\n'.join(remodulation)}\n\n{string} codé de cette manière devient {coded_string}.\n\n{end_latex_text}''' 
+
+    # Utiliser une chaîne brute pour les éléments LaTeX contenant des backslashes
+    latex_blocks = rf"26^{{{bloc}}} \leq {n} < 26^{{{bloc+1}}}"
+    latex_transposition = '\n\n'.join(transposition)
+    latex_modulation = '\n\n'.join(modulation)
+    latex_remodulation = '\n\n'.join(remodulation)
+    latex_binary_e = binary(e)
+
+    # Construction du résultat final avec des chaînes formatées (f-string)
+    result = f"""\n\n{beginning_latex_text}
+
+    $$ {latex_blocks} $$
+    Il nous faut donc coder le message en blocs de {bloc}
+
+    {groupes} $\\rightarrow$ {stringedNumGroupes}
+
+    {latex_transposition}
+
+    $$ e={latex_binary_e}_{{(2)}} $$
+
+    {table}
+
+    {latex_modulation}
+
+    {latex_remodulation}
+
+    {string} codé de cette manière devient {coded_string}.
+
+    {end_latex_text}"""
+
     return result
 
 def main():
@@ -60,5 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
